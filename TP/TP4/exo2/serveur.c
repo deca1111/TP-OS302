@@ -44,16 +44,21 @@ int main(int argc, char const *argv[])
 			printf("erreur msgrcv\n");
 			return EXIT_FAILURE;
 		}
+
 		printf("SERVEUR: reception d'une requete de la part de: %d\n",(message->contenu).pid);
+
 		/* preparation de la reponse */
-    if(((message->contenu).message)[0] == '@'){
+    if(((message->contenu).message)[0] == '@' ){
       printf("Extinction du serveur\n");
       raz_msg(SIGINT);
       return EXIT_SUCCESS;
     }
     for(int i = 0; i < strlen((message->contenu).message); i++){
-      ((message->contenu).message)[i] -= 32;
+			if((((message->contenu).message)[i] > 96) && (((message->contenu).message)[i] < 123)){
+				((message->contenu).message)[i] -= 32;
+			}
     }
+		printf("Envoi du message suivant : %s\n",(message->contenu).message);
     message->type = (message->contenu).pid;
     msgsnd(msg_id, message, sizeof(msg_contenu), MSG_FLAG );
 

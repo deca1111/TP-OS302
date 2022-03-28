@@ -10,7 +10,7 @@
 #include <string.h>
 
 typedef struct msg_contenu{
-  char * message;
+  char  message[100];
   pid_t pid;
 } msg_contenu;
 

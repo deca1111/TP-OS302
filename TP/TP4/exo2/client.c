@@ -22,17 +22,23 @@ int main(int argc, char *argv[]){
     printf("erreur msg_id\n");
     return EXIT_FAILURE;
   }
-  printf("CLIENT %d: preparation du message contenant le message suivant:%s\n", getpid(), argv[1]);
+  printf("CLIENT %d: preparation du message contenant le message suivant: [%s]\n", getpid(), argv[1]);
 
   msg_struct * message = malloc(sizeof(msg_struct));
-  (message->contenu).message = argv[1];
+  strcpy((message->contenu).message, argv[1]);
   (message->contenu).pid = getpid();
   message->type = 1;
-  printf("CLIENT %d: envoi du message:%s\n",(message->contenu).message);
-  msgsnd(msg_id, message, sizeof(msg_contenu), MSG_FLAG );
+  printf("CLIENT %d: envoi du message: [%s]\n",getpid(),(message->contenu).message);
+  if( msgsnd(msg_id, message, sizeof(msg_contenu), MSG_FLAG ) == -1){
+		printf("erreur msgsnd\n");
+		return EXIT_FAILURE;
+	}
 
-  msgrcv(msg_id, message, sizeof(msg_contenu), (long) getpid(), 0);
-  printf("CLIENT: resultat recu depuis le serveur %d : %s\n",(message->contenu).pid, (message->contenu).message);
+  if(msgrcv(msg_id, message, sizeof(msg_contenu), (long) getpid(), 0) == -1){
+		printf("erreur rcv\n");
+		return EXIT_FAILURE;
+	}
+  printf("CLIENT: resultat recu depuis le serveur %d : [%s]\n",(message->contenu).pid, (message->contenu).message);
 
   return EXIT_SUCCESS;
 }

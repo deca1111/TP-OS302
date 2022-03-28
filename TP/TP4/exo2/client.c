@@ -7,8 +7,8 @@
 #define MSG_FLAG 0
 
 int main(int argc, char *argv[]){
-  int msg_id;
-  key_t cle;
+  int msg_id, msg_id2;
+  key_t cle, cle2;
 
 
   if (argc != 2) {
@@ -16,12 +16,27 @@ int main(int argc, char *argv[]){
     printf("%d\n", argc);
     return EXIT_FAILURE;
   }
-  cle = ftok(NOM_FICHIER, 10);
-  msg_id = msgget(cle, FLAG);
-  if(msg_id == 0){
-    printf("erreur msg_id\n");
-    return EXIT_FAILURE;
-  }
+
+	//connexion de la première file de message
+	if((cle = ftok(NOM_FICHIER, 10)) == -1){
+		printf("erreur ftok\n");
+		return EXIT_FAILURE;
+	}
+	if((msg_id = msgget(cle,FLAG)) == -1){
+		printf("erreur msg_id\n");
+		return EXIT_FAILURE;
+	}
+
+	//connexion de la deuxième file de message
+	if((cle2 = ftok(NOM_FICHIER2, 10)) == -1){
+		printf("erreur ftok\n");
+		return EXIT_FAILURE;
+	}
+	if((msg_id2 = msgget(cle,FLAG)) == -1){
+		printf("erreur msg_id\n");
+		return EXIT_FAILURE;
+	}
+
   printf("CLIENT %d: preparation du message contenant le message suivant: [%s]\n", getpid(), argv[1]);
 
   msg_struct * message = malloc(sizeof(msg_struct));
@@ -34,7 +49,7 @@ int main(int argc, char *argv[]){
 		return EXIT_FAILURE;
 	}
 
-  if(msgrcv(msg_id, message, sizeof(msg_contenu), (long) getpid(), 0) == -1){
+  if(msgrcv(msg_id2, message, sizeof(msg_contenu), (long) getpid(), 0) == -1){
 		printf("erreur rcv\n");
 		return EXIT_FAILURE;
 	}

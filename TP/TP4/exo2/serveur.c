@@ -10,6 +10,7 @@ int msg_id, msg_id2;
 void  raz_msg(int signal) {
 	printf("\nSuppression de la file de message!\n");
 	msgctl(msg_id, IPC_RMID, NULL);
+	msgctl(msg_id2, IPC_RMID, NULL);
 	exit(0);
 }
 

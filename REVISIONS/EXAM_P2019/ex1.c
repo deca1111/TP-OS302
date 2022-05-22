@@ -19,6 +19,7 @@ int recherche(int Tab[],int longueur,int val){
 				break;
 			case 0:
 				for(int i =0; i< milieu; i++){
+					printf("%d\n", i);
 					if(Tab[i] == val){
 						nbOccurence++;
 						printf("Le processus fils a trouvé une occurence de %d à l'index %d\n", val, i);
@@ -27,7 +28,8 @@ int recherche(int Tab[],int longueur,int val){
 				exit(nbOccurence);
 				break;
 			default :
-				for(int i =milieu+1; i< longueur; i++){
+				for(int i =milieu; i< longueur; i++){
+					printf("%d\n", i);
 					if(Tab[i] == val){
 						nbOccurence++;
 						printf("Le processus père a trouvé une occurence de %d à l'index %d\n", val, i);

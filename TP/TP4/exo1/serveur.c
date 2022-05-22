@@ -51,7 +51,7 @@ int main(int argc, char const *argv[])
 			printf("erreur msgrcv\n");
 			return EXIT_FAILURE;
 		}
-		
+
 		printf("SERVEUR: reception d'une requete de la part de: %d\n",(message->contenu).pid);
 		/* preparation de la reponse */
 		switch((message->contenu).operation){
